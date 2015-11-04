@@ -65,7 +65,7 @@ public:
                 auto b = it->second * it2->second;
 
                 for(auto it3 = result.poly.begin(); it3 != result.poly.end(); ++it3) {
-                    
+
                 }
             }
         }
