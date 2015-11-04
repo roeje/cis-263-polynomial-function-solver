@@ -87,8 +87,7 @@ public:
 
     /* Return the highest degree in the polynomial */
     int maxDegree() const {
-        /* TODO: return the exponent of the first term (1 line of code) */
-        return 0;
+        return poly.front.second;
     }
 
     /* return the k-th exponent or zero when the polynom has no terms */
