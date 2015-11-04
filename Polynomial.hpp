@@ -93,18 +93,28 @@ public:
     /* return the k-th exponent or zero when the polynom has no terms */
     int operator% (int k) {
         /* TODO: write your code here (around 3-4 lines of code) */
-        return 0;
+        if(poly.size() == 0){
+            return 0;
+        }
+        return poly[k].second;
     }
 
     /* return the k-th coefficient, or zero when the polynom is empty */
     T operator[] (int k) const {
         /* TODO: write your code here (around 3-4 lines of code) */
-        return 0;
+        if(poly.size() == 0){
+            return 0;
+        }
+        return poly[k].first;
     }
 
     /* TODO evaluate the polynom for the given value */
     T operator() (T arg) const {
-        return 0;
+        T eval = 0;
+        for(int i = 0; i < poly.size(); i++){
+           eval += pow(poly[i].first, poly[i].second);
+        }
+        return eval;
     }
 
     /* The following function "object" is needed for sorting
