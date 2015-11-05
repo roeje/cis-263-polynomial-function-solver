@@ -62,14 +62,17 @@ public:
         for(auto it = this->poly.begin(); it != poly.end(); ++it ){
             for(auto it2 = other.poly.begin(); it2 != poly.end(); ++it2) {
                 auto a = it->first * it2->first;
-                auto b = it->second * it2->second;
-
+                auto b = it->second + it2->second;
                 for(auto it3 = result.poly.begin(); it3 != result.poly.end(); ++it3) {
-
+                    if (it3->second == b) {
+                        a = a * it3->first;
+                        result.poly.erase(it3);
+                    }
                 }
+                result.poly.push_back(make_pair(a,b));
             }
         }
-
+        sort(result.poly.begin(), result.poly.end(), exponent_comparator());
         return result;
     }
 
@@ -87,7 +90,7 @@ public:
 
     /* Return the highest degree in the polynomial */
     int maxDegree() const {
-        return poly.front.second;
+        return poly.front().second;
     }
 
     /* return the k-th exponent or zero when the polynom has no terms */
