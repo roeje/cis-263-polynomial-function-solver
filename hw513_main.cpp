@@ -55,9 +55,6 @@ TEST_CASE ("Multiplication")
 
     SECTION ("Multiplication by zero") {
         Polynomial<float> zero("[0 0]");
-        cout << "zero.first" << endl;
-        int i = zero.poly.at(0).first;
-        cout << i << endl;
         result = one * zero;
         REQUIRE (result.maxDegree() == 0);
         REQUIRE (result[0] == Approx(0.0));
@@ -142,7 +139,7 @@ TEST_CASE ("Large Polynomials") {
     Polynomial<float> p1(t1.str());
     Polynomial<float> p2(t2.str());
     Polynomial<float> prod1, prod2;
-    prod1 = p1 * p2;
+    prod1 = p1 % p2;
     for (int k = 0; k < N2; k++) {
         REQUIRE (prod1[k] == k + 1);
     }

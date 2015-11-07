@@ -61,7 +61,8 @@ public:
     Polynomial operator* (const Polynomial& other) const {
         Polynomial result;
 //        typename vector<std::pair<T, int>>::const_iterator it;
-        for(auto it = this->poly.begin(); it != this->poly.end(); ++it ){
+
+        for(auto it = poly.begin(); it != poly.end(); ++it ){
             for(auto it2 = other.poly.begin(); it2 != other.poly.end(); ++it2) {
                 auto a = (it->first * it2->first);
                 auto b = (it->second + it2->second);
@@ -84,25 +85,28 @@ public:
     }
 
     /* TODO: complete this function to multiply "this" polynomial (of M
-     * terms) with the "other" polynomial (of N terms). Use the alternate 
+     * terms) with the "other" polynomial (of N terms). Use the alternate
      * technique described in question 5.13. Hint, use a map (or
      * unordered_map) to merge like terms as they are computed.
      */
     Polynomial operator% (const Polynomial& other) const {
         Polynomial result;
-//        unordered_map <int,T> map1;
-//        for(auto it = this->poly.begin(); it != poly.end(); ++it ){
-//            for(auto it2 = other.poly.begin(); it2 != poly.end(); ++it2) {
-//                auto a = it->first * it2->first;
-//                auto b = it->second + it2->second;
-//                if(map1[b] == nullptr){
-//                    map1[b] = a;
-//                }
-//                else{
-//                    map1[b] += a;
-//                }
-//            }
-//        }
+        map<int, float> pairMap;
+        for(auto it = poly.begin(); it != poly.end(); ++it){
+            for(auto it2 = other.poly.begin(); it2 != other.poly.end(); ++it2) {
+                auto coef = it->first * it2->first;
+                auto exp = it->second + it2->second;
+                if(pairMap.find(exp) == pairMap.end()) {
+                    pairMap[exp] = coef;
+                }
+                else {
+                    pairMap[exp] += coef;
+                }
+            }
+        }
+        for(auto itr = pairMap.rbegin(); itr != pairMap.rend(); ++itr) {
+            result.poly.push_back(make_pair(itr->second, itr->first));
+        }
         return result;
     }
 
@@ -135,8 +139,10 @@ public:
         if(poly.empty()){
             return 0;
         }
-        else {
+        try{
             return poly.at(k).first;
+        }catch(const out_of_range& ex ){
+            return 0;
         }
 
     }
@@ -165,7 +171,7 @@ private:
      *
      * [coeff int] [coeff int] .....
      *
-     * For instance,   3x^5 - 7x^2 + 11 can be represented as one of 
+     * For instance,   3x^5 - 7x^2 + 11 can be represented as one of
      * the following string (whitespaces do not matter)
      *
      * [3 5] [-7 2] [11 0]
