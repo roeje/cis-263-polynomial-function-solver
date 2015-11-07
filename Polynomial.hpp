@@ -25,11 +25,12 @@ template<typename T>
 class Polynomial {
 private:
     /* coeffient and exponent of the polynom are stored as a pair<> */
-    vector<pair<T,int>> poly;
+
 
 public:
     /* each term is a pair of coefficient and exponent, the type of
      * coefficient is determined by <T>, but exponent is always an integer */
+    vector<pair<T,int>> poly;
 
     Polynomial() {
     }
@@ -53,23 +54,29 @@ public:
     }
 
     /* TODO: complete this function to multiply "this" polynomial (of M
-     * terms) with the "other" polynomial (of N terms). Use the first 
+     * terms) with the "other" polynomial (of N terms). Use the first
      * technique described in question 5.13: (a) store the MN terms of the
      * product (b) sort them (c) combine like terms
      */
     Polynomial operator* (const Polynomial& other) const {
         Polynomial result;
-        for(auto it = this->poly.begin(); it != poly.end(); ++it ){
-            for(auto it2 = other.poly.begin(); it2 != poly.end(); ++it2) {
-                auto a = it->first * it2->first;
-                auto b = it->second + it2->second;
+//        typename vector<std::pair<T, int>>::const_iterator it;
+        for(auto it = this->poly.begin(); it != this->poly.end(); ++it ){
+            for(auto it2 = other.poly.begin(); it2 != other.poly.end(); ++it2) {
+                auto a = (it->first * it2->first);
+                auto b = (it->second + it2->second);
+                bool flag = true;
                 for(auto it3 = result.poly.begin(); it3 != result.poly.end(); ++it3) {
                     if (it3->second == b) {
-                        a = a * it3->first;
-                        result.poly.erase(it3);
+                        it3->first += a;
+                        flag = false;
+                        break;
                     }
                 }
-                result.poly.push_back(make_pair(a,b));
+                if(flag) {
+                    result.poly.push_back(make_pair(a,b));
+                }
+
             }
         }
         sort(result.poly.begin(), result.poly.end(), exponent_comparator());
@@ -83,39 +90,62 @@ public:
      */
     Polynomial operator% (const Polynomial& other) const {
         Polynomial result;
-        /* TODO: write your algorithm here */
-
+//        unordered_map <int,T> map1;
+//        for(auto it = this->poly.begin(); it != poly.end(); ++it ){
+//            for(auto it2 = other.poly.begin(); it2 != poly.end(); ++it2) {
+//                auto a = it->first * it2->first;
+//                auto b = it->second + it2->second;
+//                if(map1[b] == nullptr){
+//                    map1[b] = a;
+//                }
+//                else{
+//                    map1[b] += a;
+//                }
+//            }
+//        }
         return result;
     }
 
     /* Return the highest degree in the polynomial */
     int maxDegree() const {
-        return poly.front().second;
+        if(poly.empty()) {
+            return 0;
+        }
+        else {
+            return poly.front().second;
+        }
+
     }
 
     /* return the k-th exponent or zero when the polynom has no terms */
     int operator% (int k) {
         /* TODO: write your code here (around 3-4 lines of code) */
-        if(poly.size() == 0){
+        if(poly.empty()){
             return 0;
         }
-        return poly[k].second;
+        else {
+            return poly.at(k).second;
+        }
+
     }
 
     /* return the k-th coefficient, or zero when the polynom is empty */
     T operator[] (int k) const {
         /* TODO: write your code here (around 3-4 lines of code) */
-        if(poly.size() == 0){
+        if(poly.empty()){
             return 0;
         }
-        return poly[k].first;
+        else {
+            return poly.at(k).first;
+        }
+
     }
 
     /* TODO evaluate the polynom for the given value */
     T operator() (T arg) const {
         T eval = 0;
-        for(int i = 0; i < poly.size(); i++){
-           eval += pow(poly[i].first, poly[i].second);
+        for(auto itr = this->poly.begin(); itr != this->poly.end(); ++itr) {
+            eval += (itr->first * pow(arg, itr->second));
         }
         return eval;
     }
